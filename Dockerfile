@@ -1,6 +1,11 @@
 FROM harbor-repo.vmware.com/esback/tpb-scratch-core:latest AS tpb
 
-FROM node:16
+FROM harbor-repo.vmware.com/dockerhub-proxy-cache/library/node:16.17-bullseye-slim
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential && \
+    rm -rf /var/lib/apt/lists/* && \
+    yarn config set python /usr/bin/python3
 
 COPY --from=tpb ./core ./
 
